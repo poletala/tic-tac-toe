@@ -28,9 +28,9 @@ gameField.onclick = function (event) {
     console.log(counter)
     let isCrosses = localStorage.getItem('crosses');
     let isNoughts = localStorage.getItem('noughts');
-    let imgCellFirstPlayer = (isCrosses) ? 'url(./assets/O.png) center no-repeat, white' :
+    let imgCellSecondPlayer = (isCrosses) ? 'url(./assets/O.png) center no-repeat, white' :
     (isNoughts) ? 'url(./assets/X.png) center no-repeat, white' : '';
-    let imgCellSecondPlayer = (isCrosses) ? 'url(./assets/X.png) center no-repeat, white' :
+    let imgCellFirstPlayer = (isCrosses) ? 'url(./assets/X.png) center no-repeat, white' :
                 (isNoughts) ? 'url(./assets/O.png) center no-repeat, white' : '';
     if (counter % 2 === 0) { //even click
         event.target.style.background = imgCellSecondPlayer
