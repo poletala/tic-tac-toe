@@ -1,10 +1,8 @@
 let crossesButton = document.querySelector('.crosses')
 let noughtsButton = document.querySelector('.noughts')
-
-let imageCell 
 let isCrosses
 let isNoughts
-
+//save the inf abt user's choice using local storage
 function crosses() {
     isCrosses = true
     isNoughts = false 
@@ -22,34 +20,40 @@ function noughts() {
 
 
 
-// 
+// background image changing when user clicks on the cell
 let counter = 0
-let cells = document.querySelectorAll('.field-cell') //all cells
-console.log(cells)
-for (let i=0;i<cells.length;i++) {
-    cells[i].addEventListener('click', gamePlay, true) 
-}
-function gamePlay () {
+let gameField = document.querySelector('.game-field')
+gameField.onclick = function (event) {
     counter++
     console.log(counter)
     let isCrosses = localStorage.getItem('crosses');
     let isNoughts = localStorage.getItem('noughts');
-    console.log(isCrosses)
-    if (isCrosses) {
-        if (counter % 2 === 0) { //even click on the cell
-            this.style.backgroundColor = 'yellow'; // the cell cover has changed
-        }
+    let imgCellFirstPlayer = (isCrosses) ? 'url(./assets/O.png) center no-repeat, white' :
+    (isNoughts) ? 'url(./assets/X.png) center no-repeat, white' : '';
+    let imgCellSecondPlayer = (isCrosses) ? 'url(./assets/X.png) center no-repeat, white' :
+                (isNoughts) ? 'url(./assets/O.png) center no-repeat, white' : '';
+    if (counter % 2 === 0) { //even click
+        event.target.style.background = imgCellSecondPlayer
+        event.target.style.backgroundSize = '50% 50%'
     }
-    if (isNoughts) {
-        if (counter % 2 === 0) { //even click on the cell
-            this.style.backgroundColor = 'red'; // the cell cover has changed
-        }
+    else {
+        event.target.style.background = imgCellFirstPlayer
+        event.target.style.backgroundSize = '50% 50%'
     }
-    if (counter === 9) {
-        alert('stop')
+    if (counter === 10) { 
         localStorage.setItem('crosses', (''))
         localStorage.setItem('noughts', (''))
+        alert('stop')
+        return
     }
+
+                                                        //обновляется массив
+    let cellId = event.target.id[4]
+    let cellArr = []
+    cellArr.push(cellId)
+    console.log(cellArr)
+    if (cellArr[0]==='1') {  //сравнить массивы
+        console.log('win')
+    }
+    
 }
-
-
