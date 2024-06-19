@@ -7,10 +7,17 @@
     <link rel="stylesheet" href="./styles/fonts.css">
     <title>TIC-TAC-TOE</title>
 </head>
-<body>
+<body onload='scoreOnload()'>
     <root>
         <header class="game-name">
             <h1>TIC-TAC-TOE</h1>
+            <div class="game-score">
+                <h4>Game Score</h4>
+                <h6 id="game-score">0:0</h6>
+            </div>
+            <div class="new-game" onclick="newGame()">
+                <h6>New Game</h6>
+            </div>
         </header>
         <main class="choose-button">
             <h4>Pick who goes first?</h4>

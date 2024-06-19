@@ -1,4 +1,4 @@
-body, p, h1, h4, span {
+body, p, h1, h4, h6, span {
     padding: 0;
     margin: 0;
 }
@@ -116,7 +116,7 @@ root {
 #cell7 { grid-area: 3 / 1 / 4 / 2; }
 #cell8 { grid-area: 3 / 2 / 4 / 3; }
 #cell9 { grid-area: 3 / 3 / 4 / 4; } */
-time {
+.timer {
     display: flex;
     width: 149px;
     height: 50px;
@@ -163,4 +163,30 @@ time {
 }
 .arrow-back:hover {
     color: rgb(226, 226, 226);
+}
+.game-score {
+    display: block;
+    margin: 20px auto
+    
+}
+.game-score > h4,
+.game-score > h6 {
+    text-align: center;
+    font-family: Montserrat;
+    font-size: 26px;
+    font-weight: 500;
+    color: white;
+    cursor: default;
+}
+.new-game {
+    text-align: center;
+    font-family: Montserrat;
+    font-size: 26px;
+    font-weight: 500;
+    color: white;
+    margin: 50px auto 0 auto;
+    cursor: pointer;
+}
+.new-game:hover {
+    color: rgb(232, 228, 228);
 }

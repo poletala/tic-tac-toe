@@ -7,12 +7,12 @@
     <link rel="stylesheet" href="./styles/fonts.css">
     <title>TIC-TAC-TOE</title>
 </head>
-<body>
+<body onload="startTimer()">
     <root class="game-page">
         <span class="arrow-back" onclick="location.replace("./index.html")">⟵</span>
         <header class="time-turn">
-            <time>0:00</time>
-            <h1>Player 1’s Turn</h1>
+            <p class="timer">0:00</p>
+            <h1 class="player-turn">Player 1’s Turn</h1>
         </header>
         <main class="game-box">
             <div class="game-field">
