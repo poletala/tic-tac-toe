@@ -1,4 +1,4 @@
-body, p, h1, h4 {
+body, p, h1, h4, span {
     padding: 0;
     margin: 0;
 }
@@ -152,4 +152,15 @@ time {
     justify-content: center;
     align-items: center;
     height: 30%;
+}
+.arrow-back {
+    padding-left: 20px;
+    padding-top: 20px;
+    font-family: Montserrat;
+    font-size: 22px;
+    color: white;
+    cursor: pointer;
+}
+.arrow-back:hover {
+    color: rgb(226, 226, 226);
 }
