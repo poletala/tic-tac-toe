@@ -1,3 +1,4 @@
+
 let crossesButton = document.querySelector('.crosses')
 let noughtsButton = document.querySelector('.noughts')
 let returnBack = document.querySelector('.arrow-back') 
@@ -18,24 +19,31 @@ let isNoughts
 let isGameOver
 let isPlayAgain
 let isNotEmpty 
-let interval
+let interval 
 let minutes = 0
 let seconds = 0
-
+function onePlayerGame() {
+    document.querySelector('.quantity-text').innerHTML = 'One Player Game'
+    document.querySelector('.players-quantity').classList.add('invisible-element')
+    localStorage.setItem('isBot', true)
+}
+function twoPlayersGame() {
+    document.querySelector('.quantity-text').innerHTML = 'Two Players Game'
+    document.querySelector('.players-quantity').classList.add('invisible-element')
+    localStorage.setItem('isBot', false)
+}
 function timerGame() {
-    console.log(timer.textContent)
     seconds++
     if(seconds < 10) {
-        timer.textContent = '0:0' + seconds
+        timer.textContent = minutes + ':0' + seconds
     }
     if(seconds > 9) {
-        timer.textContent = '0:' + seconds
+        timer.textContent = minutes + ':' + seconds
     }
      if(seconds > 59) {
         minutes++
         seconds = 0
-        timer.textContent = minutes + ':00' 
-
+        timer.textContent = minutes + ':0' + seconds
     }
     
 }
@@ -46,6 +54,10 @@ function startTimer() {
 function newGame() {
     gameScore.textContent = '0 : 0'
     clearGameScore()
+    localStorage.removeItem('isBot') 
+    document.querySelector('.players-quantity').classList.remove('invisible-element')
+    document.querySelector('.quantity-text').innerHTML = ''
+    clearLS()
 }
 
 function scoreOnload() { 
@@ -75,7 +87,7 @@ function noughts() {
 //click on array
 returnBack.onclick = function() {
     location.replace("./index.html") 
-    clearFirstAndSecondPlayer()
+    clearLS()
     clearXO()
 }
 
@@ -85,9 +97,10 @@ function clearXO() {
     localStorage.removeItem('noughts') 
 }
 // delete 'FirstPlayer' and 'SecondPlayer' keys from LS
-function clearFirstAndSecondPlayer() {
+function clearLS() {
     localStorage.removeItem('FirstPlayer');
     localStorage.removeItem('SecondPlayer');
+    localStorage.removeItem('bot cell');
 }
 
 function clearGameScore() {
@@ -97,18 +110,73 @@ function clearGameScore() {
 
 // comparing win combinations with players' combinations, determining the winner
 function winner() {
-    let player = (counter % 2 === 0) ? secondPlayer : firstPlayer;
-    let winnerText =  (counter % 2 === 0) ? 'Second Player' : 'First Player';
-    for (let i=0; i<winCombs.length;i++) {         
-        let intersection = player.filter(element => winCombs[i].includes(element));
-        if (intersection.length === 3) {
-            console.log(`intersection of ${player} ` + intersection)
-            alert(`And the winner is ${winnerText}!`)
-            isGameOver = true
-            localStorage.setItem(`${winnerText} score`, (Number(localStorage.getItem(`${winnerText} score`))) + 1); // game score in LS
+    let isBot = localStorage.getItem('isBot')
+    if (isBot==='true') {
+        for (let i=0; i<winCombs.length;i++) {         
+            let intersection1 = firstPlayer.filter(element => winCombs[i].includes(element));
+            let intersection2 = secondPlayer.filter(element => winCombs[i].includes(element));
+            let winnerPlayerText = (intersection1.length === 3) ? 'First Player': (intersection2.length === 3) ? 'Second Player' : '';
+            if ((intersection1.length === 3) || (intersection2.length === 3)) {
+                console.log(`intersection of First Player ` + intersection1)
+                console.log(`intersection of Second Player ` + intersection2)
+                alert(`And the winner is ${winnerPlayerText}!`)
+                isGameOver = true
+                localStorage.setItem(`${winnerPlayerText} score`, (Number(localStorage.getItem(`${ winnerPlayerText} score`))) + 1); // game score in LS
+        
+                }}    }
+    
+     else {
+        let player = (counter % 2 === 0) ? secondPlayer : firstPlayer;
+        let winnerText =  (counter % 2 === 0) ? 'Second Player' : 'First Player';
+        for (let i=0; i<winCombs.length;i++) {         
+            let intersection = player.filter(element => winCombs[i].includes(element));
+            if (intersection.length === 3) {
+                console.log(`intersection of ${player} ` + intersection)
+                alert(`And the winner is ${winnerText}!`)
+                isGameOver = true
+                localStorage.setItem(`${winnerText} score`, (Number(localStorage.getItem(`${winnerText} score`))) + 1); // game score in LS
         }
     }
+}
 }   
+// the cell choice of bot
+function botGame() {
+    let cellsPool = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+    let excludePool = (firstPlayer && !secondPlayer) ? [firstPlayer] : [...firstPlayer, ...secondPlayer];
+    console.log('Исключаемые позиции для бота ' +  excludePool)
+ 
+    let filteredCellsPool = []
+    for (let i=0;i<cellsPool.length;i++) {
+        if (excludePool.indexOf(cellsPool[i]) === -1) {
+            filteredCellsPool.push(cellsPool[i])
+        }
+    }
+    console.log('Возможные позиции для бота ' + filteredCellsPool)
+    let randomCellBot = filteredCellsPool[Math.floor(Math.random() * filteredCellsPool.length)]
+    console.log('Позиция бота ' + randomCellBot)
+    // localStorage.setItem('bot cell', randomCellBot)
+   
+    if (!secondPlayer) { //if there are no data in LS
+        secondPlayer = [randomCellBot] //comb of the Second Player (current game)
+        localStorage.setItem('SecondPlayer', JSON.stringify(secondPlayer));
+    } else { //if LS is not empty
+        secondPlayer.push(randomCellBot)
+        let comboSecondPlayer = Array.from(secondPlayer)// new cell id adding
+        console.log('Second Player comb ' + comboSecondPlayer) 
+        localStorage.setItem('SecondPlayer', JSON.stringify(comboSecondPlayer));
+    }
+    setTimeout(() => {
+        let imgCellSecondPlayer = (isCrosses) ? 'url(./assets/O.png) center no-repeat, white' :
+    (isNoughts) ? 'url(./assets/X.png) center no-repeat, white' : '';
+        document.querySelector(`#cell${randomCellBot}`).style.background = imgCellSecondPlayer
+        document.querySelector(`#cell${randomCellBot}`).style.backgroundSize = '50% 50%' //background changing 
+        console.log('Second Player clicks on ' + randomCellBot)
+    }, 500);
+}
+
+
+
+
 // 
 function combosOfPlayers() {
     if (!combosFirstPlayer) {
@@ -131,6 +199,8 @@ gameField.onclick = function (event) {
     let isCrosses = localStorage.getItem('crosses');
     let isNoughts = localStorage.getItem('noughts'); //find out which sign the user has chosen from the local storage
     
+    let isBot = localStorage.getItem('isBot')
+    
     let imgCellSecondPlayer = (isCrosses) ? 'url(./assets/O.png) center no-repeat, white' :
     (isNoughts) ? 'url(./assets/X.png) center no-repeat, white' : '';
 
@@ -138,8 +208,10 @@ gameField.onclick = function (event) {
     (isNoughts) ? 'url(./assets/O.png) center no-repeat, white' : ''; //choose right cover of the cell
     
     let cellId = Number(event.target.id[4]) //find out the id of the cell
+    if (isBot === 'false') {
 
-    if (counter % 2 === 0) { //even click
+    
+        if (counter % 2 === 0) { //even click
         playerTurnText.textContent = 'Player 1’s Turn'
         
         if (!secondPlayer) { //if there are no data in LS
@@ -160,8 +232,9 @@ gameField.onclick = function (event) {
         event.target.style.backgroundSize = '50% 50%' //background changing 
         console.log('Second Player clicks on ' + cellId)
        
-    }
-    else {
+        }
+   
+        else {
         playerTurnText.textContent = 'Player 2’s Turn'
         if (!firstPlayer) {
             firstPlayer = [cellId]
@@ -181,6 +254,59 @@ gameField.onclick = function (event) {
         event.target.style.backgroundSize = '50% 50%'
 
         console.log('First Player clicks on ' + cellId)
+        }
+    }
+    if (isBot==='true') {
+        if (!firstPlayer) {
+            firstPlayer = [cellId]
+            localStorage.setItem('FirstPlayer', JSON.stringify(firstPlayer));
+        } else {
+            if ([...secondPlayer, ...firstPlayer].includes(cellId)) {    
+                alert('Choose another one cell.')
+                return
+            }
+
+            firstPlayer.push(cellId)                                     
+            let comboFirstPlayer = Array.from(firstPlayer)
+            console.log('First Player comb ' + comboFirstPlayer)
+            localStorage.setItem('FirstPlayer', JSON.stringify(comboFirstPlayer));
+        }
+        event.target.style.background = imgCellFirstPlayer //the same actions with the First Player
+        event.target.style.backgroundSize = '50% 50%'
+
+        console.log('First Player clicks on ' + cellId)
+       
+        let cellsPool = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+        let excludePool = (firstPlayer && !secondPlayer) ? [firstPlayer] : [...firstPlayer, ...secondPlayer];
+        console.log('Исключаемые позиции для бота ' +  excludePool)
+     
+        let filteredCellsPool = []
+        for (let i=0;i<cellsPool.length;i++) {
+            if (excludePool.indexOf(cellsPool[i]) === -1) {
+                filteredCellsPool.push(cellsPool[i])
+            }
+        }
+        console.log('Возможные позиции для бота ' + filteredCellsPool)
+        let randomCellBot = filteredCellsPool[Math.floor(Math.random() * filteredCellsPool.length)]
+        console.log('Позиция бота ' + randomCellBot)
+        // localStorage.setItem('bot cell', randomCellBot)
+       
+        if (!secondPlayer) { //if there are no data in LS
+            secondPlayer = [randomCellBot] //comb of the Second Player (current game)
+            localStorage.setItem('SecondPlayer', JSON.stringify(secondPlayer));
+        } else { //if LS is not empty
+            secondPlayer.push(randomCellBot)
+            let comboSecondPlayer = Array.from(secondPlayer)// new cell id adding
+            console.log('Second Player comb ' + comboSecondPlayer) 
+            localStorage.setItem('SecondPlayer', JSON.stringify(comboSecondPlayer));
+        }
+        setTimeout(() => {
+            let imgCellSecondPlayer = (isCrosses) ? 'url(./assets/O.png) center no-repeat, white' :
+        (isNoughts) ? 'url(./assets/X.png) center no-repeat, white' : '';
+            document.querySelector(`#cell${randomCellBot}`).style.background = imgCellSecondPlayer
+            document.querySelector(`#cell${randomCellBot}`).style.backgroundSize = '50% 50%' //background changing 
+            console.log('Second Player clicks on ' + randomCellBot)
+        }, 500);
     }
 
     winner()
@@ -198,14 +324,12 @@ gameField.onclick = function (event) {
         
         //
         clearXO()
-        clearFirstAndSecondPlayer()
+        clearLS()
     }
     if(!isPlayAgain && isGameOver) {
         location.replace("./index.html") 
         clearXO()
-        clearFirstAndSecondPlayer()
+        clearLS()
     }
    
 }
-
-

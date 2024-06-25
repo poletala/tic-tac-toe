@@ -25,6 +25,11 @@ root {
 }
 .game-name {
     margin: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    height: 40%;
+    gap: 6%;
 }
 @media (max-height: 510px) {
     .game-name { margin: 12% auto; }
@@ -179,14 +184,63 @@ root {
     cursor: default;
 }
 .new-game {
+    display: flex;
+    justify-content: center;
     text-align: center;
     font-family: Montserrat;
     font-size: 26px;
     font-weight: 500;
     color: white;
-    margin: 50px auto 0 auto;
+    /* margin: 50px auto 0 auto; */
     cursor: pointer;
+    border: 2px solid white;
+    border-radius: 10px;
 }
 .new-game:hover {
-    color: rgb(232, 228, 228);
+    border: 2px solid rgb(197, 189, 189);
+}
+.players-quantity {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    height: 30%;
+}
+.one-player, 
+.two-players {
+    display: flex;
+    width: 7em;
+    height: 2em;
+    background-color: white;
+    border-radius: 10px;
+    justify-content: center;
+    align-items: center;
+    font-family: Montserrat;
+    color: #3A7BD5;
+    cursor: pointer;
+    border:  2px solid white;
+}
+.one-player:hover, 
+.two-players:hover {
+    border: 2px solid rgb(197, 189, 189);
+}
+.one-player:focus, 
+.two-players:focus {
+    border: 2px solid rgb(197, 189, 189);
+}
+.one-player:active, 
+.two-players:active {
+    background-color:#c7daf5;
+
+}
+.invisible-element {
+    visibility: hidden;
+}
+.game-name > h4 {
+    font-family: Montserrat;
+    color: white;
+    margin: 0 auto 10px auto;
+    font-size: 26px;
+    font-weight: 500;
 }
