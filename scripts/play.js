@@ -266,6 +266,8 @@ gameField.onclick = function (event) {
         console.log('Возможные позиции для бота ' + filteredCellsPool)
         let randomCellBot = filteredCellsPool[Math.floor(Math.random() * filteredCellsPool.length)]
         console.log('Позиция бота ' + randomCellBot) //bot cell choice
+        
+     
 
        
         if (!secondPlayer) { //if there are no data in LS
@@ -288,7 +290,7 @@ gameField.onclick = function (event) {
 
     winner()
 
-    if ((firstPlayer.length + secondPlayer.length) === 9 && !isGameOver) { 
+    if ((firstPlayer.length + secondPlayer.length) >= 9 && !isGameOver) { 
         alert('Nobody has won')
         isGameOver = true
     }
