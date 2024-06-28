@@ -144,7 +144,7 @@ function winner() {
         for (let i=0; i<winCombs.length;i++) {         
             let intersection = player.filter(element => winCombs[i].includes(element));
             if (intersection.length === 3) {
-                console.log(`intersection of ${player} ` + intersection)
+                console.log(`intersection of ${winnerText} ` + intersection)
                 alert(`And the winner is ${winnerText}!`)
                 isGameOver = true
                 localStorage.setItem(`${winnerText} score`, (Number(localStorage.getItem(`${winnerText} score`))) + 1); // game score in LS
@@ -258,6 +258,7 @@ gameField.onclick = function (event) {
         let excludePool = (firstPlayer && !secondPlayer) ? [firstPlayer] : [...firstPlayer, ...secondPlayer];
         console.log('Исключаемые позиции для бота ' +  excludePool)
         let filteredCellsPool = []
+        
         for (let i=0;i<cellsPool.length;i++) {
             if (excludePool.indexOf(cellsPool[i]) === -1) {
                 filteredCellsPool.push(cellsPool[i])
@@ -267,9 +268,6 @@ gameField.onclick = function (event) {
         let randomCellBot = filteredCellsPool[Math.floor(Math.random() * filteredCellsPool.length)]
         console.log('Позиция бота ' + randomCellBot) //bot cell choice
         
-     
-
-       
         if (!secondPlayer) { //if there are no data in LS
             secondPlayer = [randomCellBot] //comb of the Second Player (current game)
             localStorage.setItem('SecondPlayer', JSON.stringify(secondPlayer));
@@ -286,6 +284,10 @@ gameField.onclick = function (event) {
             document.querySelector(`#cell${randomCellBot}`).style.backgroundSize = '50% 50%' //background changing 
             console.log('Second Player clicks on ' + randomCellBot)
         }, 500);
+    playerTurnText.textContent = ''
+        
+    
+   
     }
 
     winner()
@@ -312,3 +314,4 @@ gameField.onclick = function (event) {
         clearLS()
     }
 }
+
